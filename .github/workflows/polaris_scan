@@ -1,18 +1,16 @@
 name: Polaris Scan SAST
-
-
+ 
 on:
   push:
     branches:
       - Polaris-testing
   workflow_dispatch:
-
+ 
 jobs:
   polaris:
     runs-on: ubuntu-latest
-
+ 
     steps:
-
       # --------------------------------------------------
       # Install Node.js 24 (MANDATORY FIX)
       # --------------------------------------------------
@@ -25,27 +23,28 @@ jobs:
         run: |
           node --version
           npm --version
+ 
       # --------------------------------------------------
       # Checkout source code
       # --------------------------------------------------
       - name: Checkout Code
         uses: actions/checkout@v4
-
+ 
       # --------------------------------------------------
-      # Setup Java (recommended LTS version)
+      # Setup Java 17
       # --------------------------------------------------
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-
+ 
       # --------------------------------------------------
-      # Verify Maven installation
+      # Verify Maven
       # --------------------------------------------------
       - name: Verify Maven
         run: mvn -version
-
+ 
       # --------------------------------------------------
       # Download Black Duck Bridge CLI
       # --------------------------------------------------
@@ -55,7 +54,7 @@ jobs:
             https://repo.blackduck.com/bds-integrations-release/com/blackduck/integration/bridge/binaries/bridge-cli-bundle/latest/bridge-cli-bundle-linux64.zip
           unzip -q bridge.zip
           chmod +x bridge-cli-bundle-linux64/bridge-cli
-
+ 
       # --------------------------------------------------
       # Run Polaris SAST Scan
       # --------------------------------------------------
@@ -74,3 +73,4 @@ jobs:
             polaris.assessment.types=SAST \
             polaris.waitForScan=true \
             coverity.build.command="mvn clean install -DskipTests"
+``
