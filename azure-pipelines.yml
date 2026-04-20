@@ -29,3 +29,4 @@ steps:
     polarisApplicationName: 'NIRMAL_SCM'
     coverityBuildCommandForPolaris: './mvnw clean install -DskipTests'
     coverityCleanCommandForPolaris: './mvnw clean'
+
