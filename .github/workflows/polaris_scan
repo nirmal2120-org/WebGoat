@@ -12,6 +12,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # --------------------------------------------------
+      # Install Node.js 24 (MANDATORY FIX)
+      # --------------------------------------------------
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+ 
+      - name: Verify Node version
+        run: |
+          node --version
+          npm --version
       # --------------------------------------------------
       # Checkout source code
       # --------------------------------------------------
