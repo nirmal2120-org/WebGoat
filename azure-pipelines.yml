@@ -1,32 +1,36 @@
 trigger:
-- none
+  - none
 
 pool:
   vmImage: ubuntu-latest
+
 variables:
-- group: NIRMAL_SCA
+  - group: NIRMAL_SCA
+
 steps:
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '25'
-    jdkArchitectureOption: 'x64'
-    jdkSourceOption: 'PreInstalled'
-  displayName: 'Install Java'
-- bash: |
-    mvn --version
-    java -version
-    mvn spotless:apply
-    mvn -N wrapper:wrapper
-    ./mvnw spotless:apply
+  - task: JavaToolInstaller@0
+    displayName: Install Java
+    inputs:
+      versionSpec: '25'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
 
-- task: BlackDuckSecurityScan@2
-  inputs:
-    scanType: 'polaris'
-    polarisServerUrl: '$(POLARIS_SERVER_URL)'
-    polarisAccessToken: '$(POLARIS_ACCESS_TOKEN)'
-    polarisAssessmentTypes: 'SAST,SCA'
-    polarisTestScaType: 'SCA-PACKAGE,SCA-SIGNATURE'
-    polarisApplicationName: 'NIRMAL_SCM'
-    coverityBuildCommandForPolaris: './mvnw clean install -DskipTests'
-    coverityCleanCommandForPolaris: './mvnw clean'
+  - bash: |
+      mvn --version
+      java -version
+      mvn spotless:apply
+      mvn -N wrapper:wrapper
+      ./mvnw spotless:apply
+    displayName: Build and Format
 
+  - task: BlackDuckSecurityScan@2
+    displayName: Polaris SAST and SCA Scan
+    inputs:
+      scanType: polaris
+      polarisServerUrl: $(POLARIS_SERVER_URL)
+      polarisAccessToken: $(POLARIS_ACCESS_TOKEN)
+      polarisAssessmentTypes: SAST,SCA
+      polarisTestScaType: SCA-PACKAGE,SCA-SIGNATURE
+      polarisApplicationName: NIRMAL_SCM
+      coverityBuildCommandForPolaris: ./mvnw clean install -DskipTests
+      coverityCleanCommandForPolaris: ./mvnw clean
