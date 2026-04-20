@@ -73,4 +73,4 @@ jobs:
             polaris.assessment.types=SAST \
             polaris.waitForScan=true \
             coverity.build.command="mvn clean install -DskipTests"
-``
+
