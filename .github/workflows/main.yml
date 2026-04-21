@@ -1,14 +1,15 @@
 name: Polaris Scan SAST
 
-pull_request:
-        paths-ignore:
-            - '.txt'
-            - 'LICENSE'
-            - 'docs/**'
-        branches: [ main ]
-    push:
-        branches:
-            - main
+on:
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**/*.txt'
+      - 'LICENSE'
+      - 'docs/**'
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 env:
@@ -35,17 +36,17 @@ jobs:
       # --------------------------------------------------
       # Checkout source code
       # --------------------------------------------------
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       # --------------------------------------------------
-      # Setup Java 17 (required for Polaris / Coverity)
+      # Setup Java (recommended for Polaris/Coverity)
       # --------------------------------------------------
-      - name: Setup Java 25
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '25'
+          java-version: '17'
 
       - name: Verify Java and Maven
         run: |
@@ -72,12 +73,12 @@ jobs:
         run: |
           ./bridge-cli-bundle-linux64/bridge-cli \
             --stage polaris \
-            polaris.serverUrl=$POLARIS_SERVER_URL \
-            polaris.accessToken=$POLARIS_ACCESS_TOKEN \
-            polaris.application.name=Nirmal_SCM \
-            polaris.project.name=WebGoat \
-            polaris.branch.name=Polaris-testing \
-            polaris.assessment.types=SAST \
+            polaris.serverUrl="${POLARIS_SERVER_URL}" \
+            polaris.accessToken="${POLARIS_ACCESS_TOKEN}" \
+            polaris.application.name="Nirmal_SCM" \
+            polaris.project.name="WebGoat" \
+            polaris.branch.name="Polaris-testing" \
+            polaris.assessment.types="SAST" \
             polaris.waitForScan=true \
-            coverity.build.command="mvn clean install -DskipTests" \
-            coverity.clean.command="mvn clean"
+            coverity.clean.command="mvn clean" \
+            coverity.build.command="mvn clean install -DskipTests"
