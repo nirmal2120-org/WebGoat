@@ -1,9 +1,14 @@
 name: Polaris Scan SAST
 
-on:
-  push:
-    branches:
-      - Polaris-testing
+pull_request:
+        paths-ignore:
+            - '.txt'
+            - 'LICENSE'
+            - 'docs/**'
+        branches: [ main ]
+    push:
+        branches:
+            - main
   workflow_dispatch:
 
 env:
