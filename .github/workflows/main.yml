@@ -42,11 +42,11 @@ jobs:
       # --------------------------------------------------
       # Setup Java (recommended for Polaris/Coverity)
       # --------------------------------------------------
-      - name: Setup Java 17
+      - name: Setup Java 25
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '25'
 
       - name: Verify Java and Maven
         run: |
